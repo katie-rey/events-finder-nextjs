@@ -1,22 +1,36 @@
+import { Fragment } from 'react'
 import { useRouter } from 'next/router'
 
-import { getFeaturedEvents } from '../data/dummy-data'
+import { getEventById } from '../../data/dummy-data'
+import EventContent from '../../components/event-detail/EventContent'
+import EventLogistics from '../../components/event-detail/EventLogistics'
+import EventSummary from '../../components/event-detail/EventSummary'
 
-function EventDetailPage(props) {
+function EventDetailPage() {
   const router = useRouter()
 
   const eventId = router.query.eventId
+  const event = getEventById(eventId)
+  console.log(event)
+  // console.log(event.location)
 
-  const eventById = getEventItemById(eventId)
-
-  if (!eventById) {
+  if (!event) {
     return <p>No event found</p>
   }
 
   return (
-    <div className="">
-      <h1 className="">Single Event</h1>
-    </div>
+    <Fragment>
+      <EventSummary title={event.title} />
+      <EventLogistics
+        date={event.date}
+        address={event.location}
+        image={event.image}
+        imageAlt={event.title}
+      />
+      <EventContent>
+        <p>{event.description}</p>
+      </EventContent>
+    </Fragment>
   )
 }
 
