@@ -28,3 +28,7 @@ Must be written as below:
 /_
 export async function getStaticProps(context) {}
 _/
+
+Incremental Static Generation
+
+- Regenerate a page at specific intervals
