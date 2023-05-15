@@ -6,6 +6,10 @@ import { Fragment } from 'react'
 function ProductDetailsPage(props) {
   const { loadedProduct } = props
 
+  if (!loadedProduct) {
+    return <p>Loading ...</p>
+  }
+
   return (
     <Fragment>
       <h1>{loadedProduct.title}</h1>
@@ -17,13 +21,19 @@ function ProductDetailsPage(props) {
 //For dynamic pages (named with [], we require getStaticPaths())
 // Tells  next it wil need to pre-render multiple instances of this page i.e. with id1, id2 etc
 
-export async function getStaticProps(context) {
-  const { params } = context
-  const productId = params.pid
-
+async function getData() {
   const filePath = path.join(process.cwd(), 'data', 'dummy-backend.json')
   const jsonData = await fs.readFile(filePath)
   const data = JSON.parse(jsonData)
+
+  return data
+}
+
+const data = await getData()
+
+export async function getStaticProps(context) {
+  const { params } = context
+  const productId = params.pid
 
   const product = data.products.find((product) => product.id === productId)
 
@@ -37,10 +47,13 @@ export async function getStaticProps(context) {
   }
 }
 
+// pre-rendering props for the different pages with unique params/ids
 export async function getStaticPaths() {
   return {
-    paths: [{ params: { pid: 'p1' } }, { params: { pid: 'p2' } }, { params: { pid: 'p3' } }],
-    fallback: false,
+    // paths: [{ params: { pid: 'p1' } }, { params: { pid: 'p2' } }, { params: { pid: 'p3' } }],
+    // fallback: false,
+    paths: [{ params: { pid: 'p1' } }],
+    fallback: true, // page are rendered 'just in time'
   }
 }
 
