@@ -14,6 +14,17 @@ Main reason for using NextJS
   -- Static Generation (deployed all static pages)
   -- Server-side Rendering (just in time, after deployment)
 
-Staic Generation
+Static Generation
 
-inside components we can use
+- Pre-generate using build time before deployment
+- Data prepared on server-side
+- Pre-populated pages
+- Inside components we can use getStaticProps
+- Is async, returns a Promise
+- Can write server side code on the getStaticProps function
+
+Must be written as below:
+
+/_
+export async function getStaticProps(context) {}
+_/
